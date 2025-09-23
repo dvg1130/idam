@@ -7,6 +7,7 @@ import (
 
 	"github.com/dvg1130/Portfolio/secure-backend/internal/app"
 	authdb "github.com/dvg1130/Portfolio/secure-backend/repo/auth_db"
+	datadb "github.com/dvg1130/Portfolio/secure-backend/repo/data_db"
 )
 
 // init server
@@ -19,7 +20,12 @@ func main() {
 		defer auth_db.Close()
 	}
 
-	server := app.AppServer(auth_db)
+	data_db, err := datadb.DataDBClient()
+	if err != nil {
+		log.Fatal("failed to connect to data db", err)
+	}
+
+	server := app.AppServer(auth_db, data_db)
 	http.ListenAndServe(":8003", server.Router)
 	if err != nil {
 		fmt.Println("error starting server")

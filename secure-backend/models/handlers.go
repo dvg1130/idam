@@ -5,5 +5,6 @@ import (
 )
 
 type Handlers struct {
-	Login http.HandlerFunc
+	Handler http.HandlerFunc
+	Login   http.HandlerFunc
 }
