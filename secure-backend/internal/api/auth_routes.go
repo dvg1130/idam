@@ -10,4 +10,5 @@ import (
 func InitRouter(router *http.ServeMux, h *models.Handlers) {
 
 	//routes
+	router.HandleFunc("/", h.Login)
 }
