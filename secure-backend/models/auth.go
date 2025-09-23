@@ -6,4 +6,6 @@ type Credentials struct {
 }
 
 type Login struct {
+	HashedPW string
+	JWTToken string
 }

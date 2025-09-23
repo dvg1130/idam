@@ -2,12 +2,15 @@ package api
 
 import (
 	"net/http"
-
-	"github.com/dvg1130/Portfolio/secure-backend/models"
 )
 
+type Handlers struct {
+	Handler http.HandlerFunc
+	Login   http.HandlerFunc
+}
+
 // init routes
-func InitRouter(router *http.ServeMux, h *models.Handlers) {
+func InitRoutes(router *http.ServeMux, h *Handlers) {
 
 	//routes
 	router.HandleFunc("/", h.Handler)
