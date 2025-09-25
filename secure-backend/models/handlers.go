@@ -1,1 +1,47 @@
 package models
+
+import "net/http"
+
+type AdminHandlers struct {
+	//admin
+	AdminGetAll http.HandlerFunc
+	AdminGetOne http.HandlerFunc
+	AdminUpdate http.HandlerFunc
+}
+
+type AuthHandlers struct {
+	//auth
+	Handler  http.HandlerFunc
+	Login    http.HandlerFunc
+	Register http.HandlerFunc
+	Logout   http.HandlerFunc
+}
+
+type DataHandlers struct {
+
+	//snake
+	SnakeGetAll http.HandlerFunc
+	SnakeGetOne http.HandlerFunc
+	SnakePost   http.HandlerFunc
+	SnakeUpdate http.HandlerFunc
+	SnakeDelete http.HandlerFunc
+
+	//feed
+	SnakeFeedGet    http.HandlerFunc
+	SnakeFeedPost   http.HandlerFunc
+	SnakeFeedUpdate http.HandlerFunc
+	SnakeFeedDelete http.HandlerFunc
+
+	//health
+	SnakeHealthGet    http.HandlerFunc
+	SnakeHealthPost   http.HandlerFunc
+	SnakeHealthUpdate http.HandlerFunc
+	SnakeHealthDelete http.HandlerFunc
+
+	//breed
+	SnakeBreedGetAll http.HandlerFunc
+	SnakeBreedGetOne http.HandlerFunc
+	SnakeBreedPost   http.HandlerFunc
+	SnakeBreedUpdate http.HandlerFunc
+	SnakeBreedDelete http.HandlerFunc
+}

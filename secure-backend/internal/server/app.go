@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/dvg1130/Portfolio/secure-backend/internal/api"
+	"github.com/dvg1130/Portfolio/secure-backend/models"
 )
 
 type Server struct {
@@ -23,9 +24,45 @@ func AppServer(auth_db *sql.DB, data_db *sql.DB) *Server {
 		Data_DB: data_db,
 	}
 
-	api.InitRoutes(s.Router, &api.Handlers{
-		Handler: s.Handler,
-		Login:   s.Login,
+	api.InitRoutes_Auth(s.Router, &models.AuthHandlers{
+		Handler:  s.Handler,
+		Login:    s.Login,
+		Register: s.Register,
+		Logout:   s.Logout,
+	})
+
+	api.InitRoutes_Data(s.Router, &models.DataHandlers{
+		//snakes
+		SnakeGetAll: s.SnakeGetAll,
+		SnakeGetOne: s.SnakeGetOne,
+		SnakePost:   s.SnakePost,
+		SnakeUpdate: s.SnakeUpdate,
+		SnakeDelete: s.SnakeDelete,
+
+		//feeds
+		SnakeFeedGet:    s.SnakeFeedGet,
+		SnakeFeedPost:   s.SnakeFeedPost,
+		SnakeFeedUpdate: s.SnakeFeedUpdate,
+		SnakeFeedDelete: s.SnakeFeedDelete,
+
+		//health
+		SnakeHealthGet:    s.SnakeHealthGet,
+		SnakeHealthPost:   s.SnakeHealthPost,
+		SnakeHealthUpdate: s.SnakeHealthUpdate,
+		SnakeHealthDelete: s.SnakeHealthDelete,
+
+		//breeding
+		SnakeBreedGetAll: s.SnakeBreedGetAll,
+		SnakeBreedGetOne: s.SnakeBreedGetOne,
+		SnakeBreedPost:   s.SnakeBreedPost,
+		SnakeBreedUpdate: s.SnakeBreedUpdate,
+		SnakeBreedDelete: s.SnakeBreedDelete,
+	})
+
+	api.InitRoutes_Admin(s.Router, &models.AdminHandlers{
+		AdminGetAll: s.AdminGetAll,
+		AdminGetOne: s.AdminGetOne,
+		AdminUpdate: s.AdminUpdate,
 	})
 
 	return s
