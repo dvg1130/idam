@@ -1,6 +1,8 @@
 package server
 
-import "net/http"
+import (
+	"net/http"
+)
 
 // GET one user lsit
 func (s *Server) AdminGetAll(w http.ResponseWriter, r *http.Request) {
