@@ -6,22 +6,27 @@ import (
 
 	"github.com/dvg1130/Portfolio/secure-backend/internal/api"
 	"github.com/dvg1130/Portfolio/secure-backend/models"
+	redisdb "github.com/dvg1130/Portfolio/secure-backend/repo/redis_db"
+	"github.com/redis/go-redis/v9"
+	"go.uber.org/zap"
 )
 
 type Server struct {
 	Router  *http.ServeMux
 	AUTH_DB *sql.DB
 	Data_DB *sql.DB
-	// Redis   *redis.Client
-	// Logger  *zap.Logger
+	Redis   *redis.Client
+	Logger  *zap.Logger
 }
 
-func AppServer(auth_db *sql.DB, data_db *sql.DB) *Server {
-
+func AppServer(auth_db *sql.DB, data_db *sql.DB, logger *zap.Logger) *Server {
+	rdb := redisdb.RedisClient()
 	s := &Server{
 		Router:  http.NewServeMux(),
 		AUTH_DB: auth_db,
 		Data_DB: data_db,
+		Redis:   rdb,
+		Logger:  logger,
 	}
 
 	api.InitRoutes_Auth(s.Router, &models.AuthHandlers{

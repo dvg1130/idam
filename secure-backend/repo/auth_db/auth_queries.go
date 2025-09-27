@@ -5,3 +5,5 @@ package authdb
 var UserExists = "SELECT EXISTS(SELECT 1 FROM users WHERE username = ?)"
 
 var RegisterUser = "INSERT INTO users (username, password) VALUES (?, ?)"
+
+var LoginUser = "SELECT password, role, uusid FROM users Where username = ?"
