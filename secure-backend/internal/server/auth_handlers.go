@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -11,9 +10,9 @@ import (
 	"github.com/dvg1130/Portfolio/secure-backend/internal/auth"
 	"github.com/dvg1130/Portfolio/secure-backend/internal/helpers"
 	validator "github.com/dvg1130/Portfolio/secure-backend/internal/validator/auth"
+	"github.com/dvg1130/Portfolio/secure-backend/logs"
 	"github.com/dvg1130/Portfolio/secure-backend/models"
 	authdb "github.com/dvg1130/Portfolio/secure-backend/repo/auth_db"
-	"go.uber.org/zap"
 )
 
 // entry
@@ -41,40 +40,24 @@ func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// fetch user by username
-	type ctxKey string
-	const loggerKey ctxKey = "logger"
-	logger, ok := r.Context().Value(loggerKey).(*zap.SugaredLogger)
-	if !ok {
-		// fallback if logger not found
-		logger = zap.NewExample().Sugar()
-	}
 
 	//query for user
 	var storedHash, userRole, uuid string
 
 	err = s.AUTH_DB.QueryRow(authdb.LoginUser, req.Username).Scan(&storedHash, &userRole, &uuid)
 	if err != nil {
-		//for logger
-		if err == sql.ErrNoRows {
-			logger.Warnw("Failed login attempt",
-				"timestamp", time.Now().Format(time.RFC3339),
-				"username", req.Username,
-				"ip", r.RemoteAddr,
-				"path", r.URL.Path,
-			)
-			// count failed attempt
-			s.trackFailedAttempt(r.Context(), ip)
-			http.Error(w, "invalid username or password", http.StatusUnauthorized)
-			return
-		}
 		http.Error(w, "server error", http.StatusInternalServerError)
 		return
-
 	}
 
 	//hashed pw check
-	if auth.CheckHashedPW(req.Password, storedHash) {
+	if !auth.CheckHashedPW(req.Password, storedHash) {
 		http.Error(w, "invalid username or password", http.StatusUnauthorized)
+		logs.LogEvent(s.Logger, "warn", "Failed login attempt", r, map[string]interface{}{
+			"username": req.Username,
+		})
+		// count failed attempt
+		s.trackFailedAttempt(r.Context(), ip)
 		return
 	}
 

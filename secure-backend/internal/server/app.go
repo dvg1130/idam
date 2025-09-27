@@ -16,10 +16,10 @@ type Server struct {
 	AUTH_DB *sql.DB
 	Data_DB *sql.DB
 	Redis   *redis.Client
-	Logger  *zap.Logger
+	Logger  *zap.SugaredLogger
 }
 
-func AppServer(auth_db *sql.DB, data_db *sql.DB, logger *zap.Logger) *Server {
+func AppServer(auth_db *sql.DB, data_db *sql.DB, logger *zap.SugaredLogger) *Server {
 	rdb := redisdb.RedisClient()
 	s := &Server{
 		Router:  http.NewServeMux(),

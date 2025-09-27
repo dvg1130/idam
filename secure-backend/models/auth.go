@@ -17,3 +17,8 @@ type RefreshSession struct {
 	DeviceID     string    `json:"device_id"`
 	ExpiresAt    time.Time `json:"expires_at"`
 }
+type User struct {
+	UUID     string `json:"uuid"`
+	Username string `json:"username"`
+	Role     string `json:"role"`
+}

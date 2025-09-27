@@ -1,8 +1,10 @@
 package logs
 
-import "go.uber.org/zap"
+import (
+	"go.uber.org/zap"
+)
 
-func NewLogger() *zap.Logger {
+func NewLogger() *zap.SugaredLogger {
 	logger, _ := zap.NewProduction()
-	return logger
+	return logger.Sugar()
 }
