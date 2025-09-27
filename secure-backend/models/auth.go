@@ -22,3 +22,9 @@ type User struct {
 	Username string `json:"username"`
 	Role     string `json:"role"`
 }
+
+var RoleUpdate struct {
+	Username string `json:"username"`
+	OldRole  string `json:"old_role"`
+	NewRole  string `json:"new_role"`
+}
