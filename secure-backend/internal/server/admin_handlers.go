@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/dvg1130/Portfolio/secure-backend/internal/auth"
+	"github.com/dvg1130/Portfolio/secure-backend/internal/helpers"
 	"github.com/dvg1130/Portfolio/secure-backend/logs"
 	"github.com/dvg1130/Portfolio/secure-backend/models"
 	authdb "github.com/dvg1130/Portfolio/secure-backend/repo/auth_db"
@@ -59,7 +60,50 @@ func (s *Server) AdminGetAll(w http.ResponseWriter, r *http.Request) {
 
 // GET all user lsit
 func (s *Server) AdminGetOne(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("successful connection to AdminGetOne"))
+	// ---- Claims / admin check ----
+	claims := auth.GetClaimsFromContext(r.Context())
+	if claims == nil {
+		http.Error(w, "no claims found", http.StatusUnauthorized)
+		return
+	}
+	username := claims["username"].(string)
+	role, ok := claims["role"].(string)
+	if !ok || role != "admin" {
+		http.Error(w, "forbidden", http.StatusForbidden)
+		logs.LogEvent(s.Logger, "warn", "Unauthorized access", r, map[string]interface{}{
+			"username": username,
+			"role":     role,
+		})
+		return
+	}
+	req, err := helpers.DecodeBody[models.User](w, r)
+	if err != nil {
+		return
+	}
+
+	// query for UUID of target user
+	var uuid string
+	err = s.AUTH_DB.QueryRow(authdb.AdminGetUuid, req.Username, req.Role).Scan(&uuid)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			http.Error(w, "user not found", http.StatusNotFound)
+			return
+		}
+		http.Error(w, "database query failed: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// return user info
+	user := models.User{
+		Username: req.Username,
+		Role:     req.Role,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(user); err != nil {
+		http.Error(w, "encode failed: "+err.Error(), http.StatusInternalServerError)
+	}
+
 }
 
 // UPDATE user role
