@@ -24,16 +24,15 @@ func (s *Server) SnakeFeedGet(w http.ResponseWriter, r *http.Request) {
 
 	// Expect {"sid":"<snake-id>"} in request body
 	defer r.Body.Close()
-	var req struct {
-		Sid string `json:"sid"`
-	}
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+	req, err := helpers.DecodeBody[models.SnakeSid](w, r)
+
+	if err != nil {
 		http.Error(w, "invalid request body: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 	// First, get suid for this user’s snake
 	var suid string
-	err := s.Data_DB.QueryRow(
+	err = s.Data_DB.QueryRow(
 		datadb.GetSuid,
 		userUUID, req.Sid,
 	).Scan(&suid)
