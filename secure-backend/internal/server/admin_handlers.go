@@ -12,13 +12,14 @@ import (
 	authdb "github.com/dvg1130/Portfolio/secure-backend/repo/auth_db"
 )
 
-// GET one user lsit
+// GET  user lsit
 func (s *Server) AdminGetAll(w http.ResponseWriter, r *http.Request) {
 	claims := auth.GetClaimsFromContext(r.Context())
 	if claims == nil {
 		http.Error(w, "no claims found", http.StatusUnauthorized)
 		return
 	}
+
 	username := claims["username"].(string)
 	role, ok := claims["role"].(string)
 	if !ok || role != "admin" {
@@ -40,7 +41,7 @@ func (s *Server) AdminGetAll(w http.ResponseWriter, r *http.Request) {
 	var users []models.User
 	for rows.Next() {
 		var u models.User
-		if err := rows.Scan(&u.UUID, &u.Username, &u.Role); err != nil {
+		if err := rows.Scan(&u.Username, &u.Role); err != nil {
 			http.Error(w, "row scan failed: "+err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -58,7 +59,7 @@ func (s *Server) AdminGetAll(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// GET all user lsit
+// GET one user
 func (s *Server) AdminGetOne(w http.ResponseWriter, r *http.Request) {
 	// ---- Claims / admin check ----
 	claims := auth.GetClaimsFromContext(r.Context())

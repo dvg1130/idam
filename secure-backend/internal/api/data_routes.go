@@ -95,10 +95,34 @@ func InitRoutes_Data(router *http.ServeMux, S *sql.DB, h *models.DataHandlers) {
 	)
 
 	//breeding routes
-	router.HandleFunc("/dashboard/breeding/all", h.SnakeBreedGetAll)
-	router.HandleFunc("/dashboard/breeding/one", h.SnakeBreedGetOne)
-	router.HandleFunc("/dashboard/breeding/post", h.SnakeBreedPost)
-	router.HandleFunc("/dashboard/breeding/update", h.SnakeBreedUpdate)
-	router.HandleFunc("/dashboard/breeding/delete", h.SnakeBreedDelete)
+	router.Handle("/dashboard/breeding/all", middleware.AuthMiddleware(
+		validator.Method(http.MethodGet,
+			http.HandlerFunc(h.SnakeBreedGetAll)),
+	),
+	)
+
+	router.Handle("/dashboard/breeding/one", middleware.AuthMiddleware(
+		validator.Method(http.MethodGet,
+			http.HandlerFunc(h.SnakeBreedGetOne)),
+	),
+	)
+
+	router.Handle("/dashboard/breeding/post", middleware.AuthMiddleware(
+		validator.Method(http.MethodPost,
+			http.HandlerFunc(h.SnakeBreedPost)),
+	),
+	)
+
+	router.Handle("/dashboard/breeding/update", middleware.AuthMiddleware(
+		validator.Method(http.MethodPatch,
+			http.HandlerFunc(h.SnakeBreedUpdate)),
+	),
+	)
+
+	router.Handle("/dashboard/breeding/delete", middleware.AuthMiddleware(
+		validator.Method(http.MethodDelete,
+			http.HandlerFunc(h.SnakeBreedDelete)),
+	),
+	)
 
 }

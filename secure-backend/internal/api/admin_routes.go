@@ -32,7 +32,7 @@ func InitRoutes_Admin(router *http.ServeMux, h *models.AdminHandlers) {
 	router.Handle("/admin/user/update",
 		middleware.AuthMiddleware(
 			middleware.RequireRole("admin")(
-				validator.Method(http.MethodGet,
+				validator.Method(http.MethodPatch,
 					http.HandlerFunc(h.AdminUpdate)),
 			),
 		),

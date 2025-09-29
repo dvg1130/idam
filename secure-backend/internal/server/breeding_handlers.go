@@ -89,7 +89,7 @@ func (s *Server) SnakeBreedGetAll(w http.ResponseWriter, r *http.Request) {
 
 // GET one SnakeBreed event
 func (s *Server) SnakeBreedGetOne(w http.ResponseWriter, r *http.Request) {
-
+	w.Write([]byte("successful connection to SnakeBreedGetOne"))
 }
 
 // POST SnakeBreed event

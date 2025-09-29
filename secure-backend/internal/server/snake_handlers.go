@@ -102,7 +102,7 @@ func (s *Server) SnakePost(w http.ResponseWriter, r *http.Request) {
 
 	}
 	uuid := claims["uuid"].(string)
-	role := claims["role"].(string)
+	// role := claims["role"].(string)
 
 	//decode json
 	var req models.Snake
@@ -148,7 +148,7 @@ func (s *Server) SnakePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Fprintln(w, "Upload Successful", uuid, role)
+	fmt.Fprintln(w, "Upload Successful")
 
 }
 

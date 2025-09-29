@@ -8,7 +8,9 @@ var RegisterUser = "INSERT INTO users (username, password) VALUES (?, ?)"
 
 var LoginUser = "SELECT password, role, uuid FROM users Where username = ?"
 
-var AdminGetUsers = "SELECT uuid, username, role FROM users"
+//admin
+
+var AdminGetUsers = "SELECT username, role FROM users"
 
 var AdminGetUuid = "SELECT uuid FROM users WHERE username = ? AND role = ?"
 

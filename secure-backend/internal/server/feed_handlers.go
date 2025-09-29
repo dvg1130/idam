@@ -43,6 +43,38 @@ func (s *Server) SnakeFeedGet(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error retrieving snake id: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	// Now get all feeding records for that snake
+	rows, err := s.Data_DB.Query(
+		datadb.GetSnakeFeeds,
+		suid,
+	)
+	if err != nil {
+		http.Error(w, "error retrieving feeding records: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var feeds []models.SnakeFeed
+	for rows.Next() {
+		var f models.SnakeFeed
+		if err := rows.Scan(&f.Sid,
+			&f.FeedDate, &f.PreyType, &f.PreySize, &f.Notes); err != nil {
+			http.Error(w, "error scanning row: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+		feeds = append(feeds, f)
+	}
+	if err := rows.Err(); err != nil {
+		http.Error(w, "row iteration error: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(feeds); err != nil {
+		http.Error(w, "failed to encode JSON", http.StatusInternalServerError)
+	}
+
 }
 
 // POST snake feed rec
@@ -101,12 +133,10 @@ func (s *Server) SnakeFeedUpdate(w http.ResponseWriter, r *http.Request) {
 
 	req, err := helpers.DecodeBody[models.UpdateSnakeFeed](w, r)
 	if err != nil {
-		return
-	}
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "invalid request body: "+err.Error(), http.StatusBadRequest)
 		return
 	}
+
 	// Validate: need sid + feed_date + at least one update field
 	if req.Sid == "" || req.FeedDate == "" {
 		http.Error(w, "sid and feed_date are required", http.StatusBadRequest)

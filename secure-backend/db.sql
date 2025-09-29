@@ -1,3 +1,7 @@
+
+-- make sure var mathc in queries
+
+
 CREATE TABLE IF NOT EXISTS users (
     uuid     CHAR(36) NOT NULL DEFAULT (UUID()),
     username VARCHAR(255) NOT NULL,
