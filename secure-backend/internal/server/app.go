@@ -59,13 +59,6 @@ func AppServer(auth_db *sql.DB, data_db *sql.DB, logger *zap.SugaredLogger) *Ser
 		SnakeHealthUpdate: s.SnakeHealthUpdate,
 		SnakeHealthDelete: s.SnakeHealthDelete,
 
-		//breeding
-		SnakeBreedGetAll: s.SnakeBreedGetAll,
-		SnakeBreedGetOne: s.SnakeBreedGetOne,
-		SnakeBreedPost:   s.SnakeBreedPost,
-		SnakeBreedUpdate: s.SnakeBreedUpdate,
-		SnakeBreedDelete: s.SnakeBreedDelete,
-
 		S: s.Data_DB,
 	})
 
@@ -74,6 +67,16 @@ func AppServer(auth_db *sql.DB, data_db *sql.DB, logger *zap.SugaredLogger) *Ser
 		AdminGetOne: s.AdminGetOne,
 		AdminUpdate: s.AdminUpdate,
 	})
+
+	api.InitRoutes_Breeding(s.Router, &models.BreedingHandlers{
+		//breeding
+		SnakeBreedGetAll: s.SnakeBreedGetAll,
+		SnakeBreedGetOne: s.SnakeBreedGetOne,
+		SnakeBreedPost:   s.SnakeBreedPost,
+		SnakeBreedUpdate: s.SnakeBreedUpdate,
+		SnakeBreedDelete: s.SnakeBreedDelete,
+	})
+
 	s.Router = helpers.ServeMuxWrapper(
 		s.Router,
 		middleware.SecurityHeaders,
