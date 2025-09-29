@@ -69,3 +69,41 @@ type DeleteSnakeHealth struct {
 	Sid       string `json:"sid"`
 	CheckDate string `json:"check_date"`
 }
+
+type FindBreedingEvent struct {
+	Sid          string `json:"sid"`
+	BreedingYear string `json:"breeding_year"`
+}
+
+type BreedingEventItem struct {
+	Sid           string   `json:"sid"`
+	BreedingYears []string `json:"breeding_years"`
+}
+
+type BreedingEvent struct {
+	FemaleSid     string  `json:"female_sid"`          // snake's ID
+	Male1Sid      string  `json:"mate1_sid"`           // mate's ID
+	Male2Sid      string  `json:"mate2_sid,omitempty"` // mate's ID
+	Male3Sid      string  `json:"mate3_sid,omitempty"` // mate's ID
+	Male4Sid      string  `json:"mate4_sid,omitempty"` // mate's ID
+	BreedingYear  string  `json:"breeding_year"`       // YYYY-MM-DD or just YYYY-MM
+	FemaleWeight  *string `json:"female_weight,omitempty"`
+	Male1Weight   *string `json:"male1_weight,omitempty"`
+	Male2Weight   *string `json:"male2_weight,omitempty"`
+	Male3Weight   *string `json:"male3_weight,omitempty"`
+	Male4Weight   *string `json:"male4_weight,omitempty"`
+	CoolingStart  *string `json:"cooling_start,omitempty"`
+	CoolingEnd    *string `json:"cooling_end,omitempty"`
+	WarmingStart  *string `json:"warming_start,omitempty"`
+	WarmingEnd    *string `json:"warming_end,omitempty"`
+	PairingDate1  *string `json:"pairing1_date,omitempty"`
+	PairingDate2  *string `json:"pairing2_date,omitempty"`
+	PairingDate3  *string `json:"pairing3_date,omitempty"`
+	PairingDate4  *string `json:"pairing4_date,omitempty"`
+	GravidDate    *string `json:"gravid_date,omitempty"`
+	LayDate       *string `json:"lay_date,omitempty"`
+	ClutchSize    *int    `json:"clutch_size,omitempty"`
+	ClutchSurvive *string `json:"clutch_survive,omitempty"`
+	Outcome       *string `json:"outcome,omitempty"`
+	Notes         *string `json:"notes,omitempty"`
+}

@@ -3,23 +3,15 @@ package api
 import (
 	"net/http"
 
+	validator "github.com/dvg1130/Portfolio/secure-backend/internal/validator/util"
 	"github.com/dvg1130/Portfolio/secure-backend/models"
 )
 
-// type AuthHandlers struct {
-// 	//auth
-// 	Handler  http.HandlerFunc
-// 	Login    http.HandlerFunc
-// 	Register http.HandlerFunc
-// 	Logout   http.HandlerFunc
-// }
-
-// init routes auth
 func InitRoutes_Auth(router *http.ServeMux, h *models.AuthHandlers) {
 
 	//routes
 	router.HandleFunc("/", h.Handler)
-	router.HandleFunc("/login", h.Login)
-	router.HandleFunc("/register", h.Register)
-	router.HandleFunc("/logout", h.Logout)
+	router.HandleFunc("/login", validator.Method(http.MethodPost, h.Login))
+	router.HandleFunc("/register", validator.Method(http.MethodPost, h.Register))
+	router.HandleFunc("/logout", validator.Method(http.MethodPost, h.Logout))
 }

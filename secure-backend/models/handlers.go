@@ -1,6 +1,9 @@
 package models
 
-import "net/http"
+import (
+	"database/sql"
+	"net/http"
+)
 
 type AdminHandlers struct {
 	//admin
@@ -18,6 +21,7 @@ type AuthHandlers struct {
 }
 
 type DataHandlers struct {
+	S *sql.DB
 
 	//snake
 	SnakeGetAll http.HandlerFunc

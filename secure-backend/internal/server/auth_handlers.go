@@ -35,6 +35,14 @@ func (s *Server) Login(w http.ResponseWriter, r *http.Request) {
 	ip := helpers.ClientIP(r)
 	locked, _ := s.Redis.Exists(r.Context(), "lockout:"+ip).Result()
 	if locked > 0 {
+		logs.LogEvent(
+			s.Logger, "warn", "Account lockout triggered", r,
+			map[string]interface{}{
+				"ip":         ip,
+				"path":       r.URL.Path,
+				"user_agent": r.UserAgent(),
+			},
+		)
 		http.Error(w, "Too many failed attempts. Try again in 1 hour.", http.StatusTooManyRequests)
 		return
 	}

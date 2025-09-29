@@ -1,32 +1,98 @@
 package api
 
 import (
+	"database/sql"
 	"net/http"
 
+	"github.com/dvg1130/Portfolio/secure-backend/internal/middleware"
+	validator "github.com/dvg1130/Portfolio/secure-backend/internal/validator/util"
 	"github.com/dvg1130/Portfolio/secure-backend/models"
 )
 
 // init routes auth
-func InitRoutes_Data(router *http.ServeMux, h *models.DataHandlers) {
+func InitRoutes_Data(router *http.ServeMux, S *sql.DB, h *models.DataHandlers) {
 
 	//snake routes
-	router.HandleFunc("/dashboard", h.SnakeGetAll)
-	router.HandleFunc("/dashboard/snake", h.SnakeGetOne)
-	router.HandleFunc("/dashboard/snake/post", h.SnakePost)
-	router.HandleFunc("/dashboard/snake/update", h.SnakeUpdate)
-	router.HandleFunc("/dashboard/snake/delete", h.SnakeDelete)
+	router.Handle("/dashboard",
+		middleware.AuthMiddleware(
+			validator.Method(http.MethodGet, http.HandlerFunc(h.SnakeGetAll)),
+		),
+	)
+
+	router.Handle("/dashboard/snake",
+		middleware.AuthMiddleware(
+			validator.Method(http.MethodGet, http.HandlerFunc(h.SnakeGetOne)),
+		),
+	)
+
+	router.Handle("/dashboard/snake/post", middleware.AuthMiddleware(
+		middleware.RecordsLimiter(h.S)(
+			validator.Method(http.MethodPost, http.HandlerFunc(h.SnakePost)),
+		),
+	),
+	)
+
+	router.Handle("/dashboard/snake/update",
+		middleware.AuthMiddleware(
+			validator.Method(http.MethodPatch, http.HandlerFunc(h.SnakeUpdate)),
+		),
+	)
+
+	router.Handle("/dashboard/snake/delete",
+		middleware.AuthMiddleware(
+			validator.Method(http.MethodDelete, http.HandlerFunc(h.SnakeDelete)),
+		),
+	)
 
 	//feed routes
-	router.HandleFunc("/dashboard/snake/feeds", h.SnakeFeedGet)
-	router.HandleFunc("/dashboard/snake/feeds/post", h.SnakeFeedPost)
-	router.HandleFunc("/dashboard/snake/feeds/update", h.SnakeFeedUpdate)
-	router.HandleFunc("/dashboard/snake/feeds/delete", h.SnakeFeedDelete)
+	router.Handle("/dashboard/snake/feeds",
+		middleware.AuthMiddleware(
+			validator.Method(http.MethodGet, http.HandlerFunc(h.SnakeFeedGet)),
+		),
+	)
+
+	router.Handle("/dashboard/snake/feeds/post",
+		middleware.AuthMiddleware(
+			validator.Method(http.MethodPost, http.HandlerFunc(h.SnakeFeedPost)),
+		),
+	)
+
+	router.Handle("/dashboard/snake/feeds/update",
+		middleware.AuthMiddleware(
+			validator.Method(http.MethodPatch, http.HandlerFunc(h.SnakeFeedUpdate)),
+		),
+	)
+
+	router.Handle("/dashboard/snake/feeds/delete",
+		middleware.AuthMiddleware(
+			validator.Method(http.MethodDelete, http.HandlerFunc(h.SnakeFeedDelete)),
+		),
+	)
 
 	// //health routes
-	router.HandleFunc("/dashboard/snake/health", h.SnakeHealthGet)
-	router.HandleFunc("/dashboard/snake/health/post", h.SnakeHealthPost)
-	router.HandleFunc("/dashboard/snake/health/update", h.SnakeHealthUpdate)
-	router.HandleFunc("/dashboard/snake/health/delete", h.SnakeHealthDelete)
+	router.Handle("/dashboard/snake/health", middleware.AuthMiddleware(
+		validator.Method(http.MethodGet,
+			http.HandlerFunc(h.SnakeHealthGet)),
+	),
+	)
+
+	router.Handle("/dashboard/snake/health/post", middleware.AuthMiddleware(
+		validator.Method(http.MethodPost,
+			http.HandlerFunc(h.SnakeHealthPost)),
+	),
+	)
+
+	router.Handle("/dashboard/snake/health/update", middleware.AuthMiddleware(
+		validator.Method(http.MethodPatch,
+			http.HandlerFunc(h.SnakeHealthUpdate)),
+	),
+	)
+
+	router.Handle("/dashboard/snake/health/delete", middleware.AuthMiddleware(
+		validator.Method(http.MethodDelete,
+			http.HandlerFunc(h.SnakeHealthDelete)),
+	),
+	)
 
 	//breeding routes
 	router.HandleFunc("/dashboard/breeding/all", h.SnakeBreedGetAll)

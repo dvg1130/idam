@@ -30,3 +30,5 @@ var PostSnakeHealth = "(suid, uuid, sid, check_date, weight, length, topic, note
 var UpdateSnakeHealth = "UPDATE health SET %s WHERE suid = ? AND check_date = ?"
 
 var DeleteSnakeHealth = "DELETE FROM health WHERE suid = ? AND check_date = ?"
+
+//breeding

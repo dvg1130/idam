@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"github.com/dvg1130/Portfolio/secure-backend/internal/api"
+	"github.com/dvg1130/Portfolio/secure-backend/internal/helpers"
+	"github.com/dvg1130/Portfolio/secure-backend/internal/middleware"
 	"github.com/dvg1130/Portfolio/secure-backend/models"
 	redisdb "github.com/dvg1130/Portfolio/secure-backend/repo/redis_db"
 	"github.com/redis/go-redis/v9"
@@ -17,6 +19,7 @@ type Server struct {
 	Data_DB *sql.DB
 	Redis   *redis.Client
 	Logger  *zap.SugaredLogger
+	S       *sql.DB
 }
 
 func AppServer(auth_db *sql.DB, data_db *sql.DB, logger *zap.SugaredLogger) *Server {
@@ -36,7 +39,7 @@ func AppServer(auth_db *sql.DB, data_db *sql.DB, logger *zap.SugaredLogger) *Ser
 		Logout:   s.Logout,
 	})
 
-	api.InitRoutes_Data(s.Router, &models.DataHandlers{
+	api.InitRoutes_Data(s.Router, s.Data_DB, &models.DataHandlers{
 		//snakes
 		SnakeGetAll: s.SnakeGetAll,
 		SnakeGetOne: s.SnakeGetOne,
@@ -62,6 +65,8 @@ func AppServer(auth_db *sql.DB, data_db *sql.DB, logger *zap.SugaredLogger) *Ser
 		SnakeBreedPost:   s.SnakeBreedPost,
 		SnakeBreedUpdate: s.SnakeBreedUpdate,
 		SnakeBreedDelete: s.SnakeBreedDelete,
+
+		S: s.Data_DB,
 	})
 
 	api.InitRoutes_Admin(s.Router, &models.AdminHandlers{
@@ -69,6 +74,11 @@ func AppServer(auth_db *sql.DB, data_db *sql.DB, logger *zap.SugaredLogger) *Ser
 		AdminGetOne: s.AdminGetOne,
 		AdminUpdate: s.AdminUpdate,
 	})
+	s.Router = helpers.ServeMuxWrapper(
+		s.Router,
+		middleware.SecurityHeaders,
+		middleware.LoggingMiddleware(logger),
+	)
 
 	return s
 }
