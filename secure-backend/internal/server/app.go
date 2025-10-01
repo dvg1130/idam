@@ -70,11 +70,12 @@ func AppServer(auth_db *sql.DB, data_db *sql.DB, logger *zap.SugaredLogger) *Ser
 
 	api.InitRoutes_Breeding(s.Router, &models.BreedingHandlers{
 		//breeding
-		SnakeBreedGetAll: s.SnakeBreedGetAll,
-		SnakeBreedGetOne: s.SnakeBreedGetOne,
-		SnakeBreedPost:   s.SnakeBreedPost,
-		SnakeBreedUpdate: s.SnakeBreedUpdate,
-		SnakeBreedDelete: s.SnakeBreedDelete,
+		SnakeBreedGetBySnake: s.SnakeBreedGetBySnake,
+		SnakeBreedGetAll:     s.SnakeBreedGetAll,
+		SnakeBreedGetOne:     s.SnakeBreedGetOne,
+		SnakeBreedPost:       s.SnakeBreedPost,
+		SnakeBreedUpdate:     s.SnakeBreedUpdate,
+		SnakeBreedDelete:     s.SnakeBreedDelete,
 	})
 
 	s.Router = helpers.ServeMuxWrapper(

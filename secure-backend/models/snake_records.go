@@ -71,8 +71,12 @@ type DeleteSnakeHealth struct {
 }
 
 type FindBreedingEvent struct {
-	Sid          string `json:"sid"`
-	BreedingYear string `json:"breeding_year"`
+	Sid      string `json:"sid"`
+	Event_id string `json:"event_id"`
+}
+type FindBreedingEvent2 struct {
+	Sid      string `json:"sid"`
+	Event_id string `json:"event_id"`
 }
 
 type BreedingEventItem struct {
@@ -81,29 +85,53 @@ type BreedingEventItem struct {
 }
 
 type BreedingEvent struct {
-	FemaleSid     string  `json:"female_sid"`          // snake's ID
-	Male1Sid      string  `json:"mate1_sid"`           // mate's ID
-	Male2Sid      string  `json:"mate2_sid,omitempty"` // mate's ID
-	Male3Sid      string  `json:"mate3_sid,omitempty"` // mate's ID
-	Male4Sid      string  `json:"mate4_sid,omitempty"` // mate's ID
-	BreedingYear  string  `json:"breeding_year"`       // YYYY-MM-DD or just YYYY-MM
-	FemaleWeight  *string `json:"female_weight,omitempty"`
-	Male1Weight   *string `json:"male1_weight,omitempty"`
-	Male2Weight   *string `json:"male2_weight,omitempty"`
-	Male3Weight   *string `json:"male3_weight,omitempty"`
-	Male4Weight   *string `json:"male4_weight,omitempty"`
-	CoolingStart  *string `json:"cooling_start,omitempty"`
-	CoolingEnd    *string `json:"cooling_end,omitempty"`
-	WarmingStart  *string `json:"warming_start,omitempty"`
-	WarmingEnd    *string `json:"warming_end,omitempty"`
-	PairingDate1  *string `json:"pairing1_date,omitempty"`
-	PairingDate2  *string `json:"pairing2_date,omitempty"`
-	PairingDate3  *string `json:"pairing3_date,omitempty"`
-	PairingDate4  *string `json:"pairing4_date,omitempty"`
-	GravidDate    *string `json:"gravid_date,omitempty"`
-	LayDate       *string `json:"lay_date,omitempty"`
-	ClutchSize    *int    `json:"clutch_size,omitempty"`
-	ClutchSurvive *string `json:"clutch_survive,omitempty"`
-	Outcome       *string `json:"outcome,omitempty"`
+	Event_id       string  `json:"event_id"`
+	FemaleSid      string  `json:"female_sid"`          // snake's ID
+	Male1Sid       string  `json:"ma1e1_sid"`           // mate's ID
+	Male2Sid       string  `json:"ma1e2_sid,omitempty"` // mate's ID
+	Male3Sid       string  `json:"ma1e3_sid,omitempty"` // mate's ID
+	Male4Sid       string  `json:"ma1e4_sid,omitempty"` // mate's ID
+	BreedingYear   string  `json:"breeding_year"`
+	BreedingSeason string  `json:"breeding_season"`
+	FemaleWeight   *string `json:"female_weight,omitempty"`
+	Male1Weight    *string `json:"male1_weight,omitempty"`
+	Male2Weight    *string `json:"male2_weight,omitempty"`
+	Male3Weight    *string `json:"male3_weight,omitempty"`
+	Male4Weight    *string `json:"male4_weight,omitempty"`
+	CoolingStart   *string `json:"cooling_start,omitempty"`
+	CoolingEnd     *string `json:"cooling_end,omitempty"`
+	WarmingStart   *string `json:"warming_start,omitempty"`
+	WarmingEnd     *string `json:"warming_end,omitempty"`
+	PairingDate1   *string `json:"pairing1_date,omitempty"`
+	PairingDate2   *string `json:"pairing2_date,omitempty"`
+	PairingDate3   *string `json:"pairing3_date,omitempty"`
+	PairingDate4   *string `json:"pairing4_date,omitempty"`
+	GravidDate     *string `json:"gravid_date,omitempty"`
+	LayDate        *string `json:"lay_date,omitempty"`
+	ClutchSize     *int    `json:"clutch_size,omitempty"`
+	ClutchSurvive  *string `json:"clutch_survive,omitempty"`
+	Outcome        *string `json:"outcome,omitempty"`
+	Notes          *string `json:"notes,omitempty"`
+}
+type BreedingSummary struct {
+	BreedingUUID string `json:"breeding_uuid"`
+	EventID      string `json:"event_id"`
+	Year         string `json:"breeding_year"`
+	Season       string `json:"breeding_season"`
+}
+
+type Offspring struct {
+	Uuid          string  `json:"uuid"`
+	Baby_Suid     string  `json:"baby_suid"`
+	Baby_Sid      string  `json:"baby_sid"`
+	Mother_Suid   string  `json:"mother_suid"`
+	Mother_Sid    string  `json:"mother_sid"`
+	Father_suid   string  `json:"father_suid"`
+	Father_sid    string  `json:"father_sid"`
+	Breeding_uuid string  `json:"breeding_uuid"`
+	Breed_year    string  `json:"breeding_year"`
+	Baby_genes    string  `json:"baby_genes"`
+	Mother_genes  string  `json:"mother_genes"`
+	Father_genes  string  `json:"father_genes"`
 	Notes         *string `json:"notes,omitempty"`
 }

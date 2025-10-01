@@ -96,6 +96,7 @@ CREATE TABLE breeding (
     notes          TEXT(255),
     FOREIGN KEY (female_suid)      REFERENCES snakes(suid),
     FOREIGN KEY (male1_suid) REFERENCES snakes(suid)
+
 );
 
 -- offspring

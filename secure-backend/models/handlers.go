@@ -45,9 +45,10 @@ type DataHandlers struct {
 
 type BreedingHandlers struct {
 	//breed
-	SnakeBreedGetAll http.HandlerFunc
-	SnakeBreedGetOne http.HandlerFunc
-	SnakeBreedPost   http.HandlerFunc
-	SnakeBreedUpdate http.HandlerFunc
-	SnakeBreedDelete http.HandlerFunc
+	SnakeBreedGetAll     http.HandlerFunc
+	SnakeBreedGetBySnake http.HandlerFunc
+	SnakeBreedGetOne     http.HandlerFunc
+	SnakeBreedPost       http.HandlerFunc
+	SnakeBreedUpdate     http.HandlerFunc
+	SnakeBreedDelete     http.HandlerFunc
 }

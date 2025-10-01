@@ -17,6 +17,11 @@ func InitRoutes_Breeding(router *http.ServeMux, h *models.BreedingHandlers) {
 			http.HandlerFunc(h.SnakeBreedGetAll)),
 	),
 	)
+	router.Handle("/dashboard/breeding/snake", middleware.AuthMiddleware(
+		validator.Method(http.MethodGet,
+			http.HandlerFunc(h.SnakeBreedGetBySnake)),
+	),
+	)
 
 	router.Handle("/dashboard/breeding/one", middleware.AuthMiddleware(
 		validator.Method(http.MethodGet,
