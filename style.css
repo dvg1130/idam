@@ -179,3 +179,16 @@ padding-right: 2rem;
   display:block !important;
   margin-top: 75px;
 }
+.header-wrapper{
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
+.footer-wrapper{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 80px;
+  padding-left: 80px;
+
+}

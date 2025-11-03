@@ -7,4 +7,7 @@
     <?php wp_head()?>
 </head>
 <body>
-    <h1>iDamiana</h1>
+     <div class="header-wrapper">
+        <?php the_custom_logo()?>
+     </div>
+
